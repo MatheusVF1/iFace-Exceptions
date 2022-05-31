@@ -21,7 +21,6 @@ public class iFace {
             } catch (InputMismatchException e) {
                 System.out.println("\nEntrada digitada inválida!");
                 sc.nextLine();
-
             }
 
             switch(entrada){
@@ -62,7 +61,7 @@ public class iFace {
                     else if(password.equals(contas.get(id).getPassword())){  //VERIFICANDO SE A SENHA CONFERE COM O LOGIN
                         System.out.println("\nSeja bem vindo a sua conta no iFace, " + contas.get(id).getUsername() + "!\n");
                         System.out.println("Escolha o que deseja fazer:"); //MENU DE OPÇÕES DO USUARIO ABAIXO
-                        System.out.println("0 - Sair da Conta\n1 - Editar meu perfil\n2 - Exibir meu perfil\n3 - Adicionar um amigo\n4 - Pedidos de amizade\n5 - Exibir lista de amigos\n6 - Enviar uma mensagem\n7 - Ler minhas mensagens\n8 - Criar uma comunidade\n9 - Adicionar membros\n10 - Exibir o perfil de algum usuário\n11 - Exibir alguma comunidade\n12 - Mandar mensagens para o Feed\n13 - Ver meu Feed\n14 - Controlar visualizações no Feed\n15 - Exibir o Feed de algum usuario\n16 - Apagar sua conta");
+                        System.out.println("0 - Sair da Conta\n1 - Editar meu perfil\n2 - Exibir meu perfil\n3 - Adicionar um amigo\n4 - Pedidos de amizade\n5 - Exibir lista de amigos\n6 - Enviar uma mensagem\n7 - Ler minhas mensagens\n8 - Criar uma comunidade\n9 - Adicionar membro a comunidade\n10 - Remover membro da comunidade\n11 - Exibir o perfil de algum usuário\n12 - Exibir alguma comunidade\n13 - Mandar mensagens para o Feed\n14 - Ver meu Feed\n15 - Controlar visualizações no Feed\n16 - Exibir o Feed de algum usuario\n17 - Apagar sua conta");
                         
                         int entrada2 = -11;
 
@@ -119,34 +118,38 @@ public class iFace {
                                     break;
 
                                 case 10:
-                                    contas.get(id).exibirPerfilAlguem(contas); //MOSTRAR PERFIL DE ALGUÉM
+                                    contas.get(id).removerComunidade(contas);
                                     break;
 
                                 case 11:
-                                    contas.get(id).exibirComunidadeAlguem(contas); //MOSTRAR COMUNIDADE DE ALGUEM
+                                    contas.get(id).exibirPerfilAlguem(contas); //MOSTRAR PERFIL DE ALGUÉM
                                     break;
 
                                 case 12:
-                                    contas.get(id).mandarFeed(); //MANDAR MENSAGEM PARA O FEED
+                                    contas.get(id).exibirComunidadeAlguem(contas); //MOSTRAR COMUNIDADE DE ALGUEM
                                     break;
 
                                 case 13:
-                                    contas.get(id).printarFeed();  //VER MEU FEED
+                                    contas.get(id).mandarFeed(); //MANDAR MENSAGEM PARA O FEED
                                     break;
 
                                 case 14:
-                                    contas.get(id).controlarFeed(); //CONTROLAR QUEM PODE VER O FEED
+                                    contas.get(id).printarFeed();  //VER MEU FEED
                                     break;
 
                                 case 15:
-                                    contas.get(id).exibirFeedAlguem(contas);  //MOSTRAR O FEED DE ALGUÉM
+                                    contas.get(id).controlarFeed(); //CONTROLAR QUEM PODE VER O FEED
                                     break;
 
                                 case 16:
+                                    contas.get(id).exibirFeedAlguem(contas);  //MOSTRAR O FEED DE ALGUÉM
+                                    break;
+
+                                case 17:
                                     contas.get(id).excluirConta(contas, id); //EXCLUI A CONTA
                                     entrada2 = 0;
                                     break;
-                                
+
                                 default:
                                     System.out.println("Por favor digite um dos números possíveis!\n");
                                     break;
@@ -154,7 +157,7 @@ public class iFace {
                             }
                             if(entrada2 != 0){
                             System.out.println("\nEscolha o que deseja fazer:");
-                            System.out.println("0 - Sair da Conta\n1 - Editar meu perfil\n2 - Exibir meu perfil\n3 - Adicionar um amigo\n4 - Pedidos de amizade\n5 - Exibir lista de amigos\n6 - Enviar uma mensagem\n7 - Ler minhas mensagens\n8 - Criar uma comunidade\n9 - Adicionar membros\n10 - Exibir o perfil de algum usuário\n11 - Exibir alguma comunidade\n12 - Mandar mensagens para o Feed\n13 - Ver meu Feed\n14 - Controlar visualizações no Feed\n15 - Exibir o Feed de algum usuario\n16 - Apagar sua conta");
+                            System.out.println("0 - Sair da Conta\n1 - Editar meu perfil\n2 - Exibir meu perfil\n3 - Adicionar um amigo\n4 - Pedidos de amizade\n5 - Exibir lista de amigos\n6 - Enviar uma mensagem\n7 - Ler minhas mensagens\n8 - Criar uma comunidade\n9 - Adicionar membro a comunidade\n10 - Remover membro da comunidade\n11 - Exibir o perfil de algum usuário\n12 - Exibir alguma comunidade\n13 - Mandar mensagens para o Feed\n14 - Ver meu Feed\n15 - Controlar visualizações no Feed\n16 - Exibir o Feed de algum usuario\n17 - Apagar sua conta");
                         }
                     }
                 }
