@@ -22,6 +22,7 @@ public class Community{
 		System.out.println("\nParabéns! Sua comunidade foi criada!");
 		
 	}
+
 	
 	public void mostrarComunidade() {
 		System.out.println("\n--------------------------\n" + nomeComunidade.toUpperCase() + "\n--------------------------");
