@@ -10,7 +10,6 @@ public class Account {
     private Community comunidadeDono = null;
     private ArrayList<String> amigosAdd = new ArrayList<String>();
     private ArrayList<String> amigos = new ArrayList<String>();
-    public ArrayList<String> comunidades = new ArrayList<String>();
     private ArrayList<String> minhasComunidades = new ArrayList<String>();
     private ArrayList<Messages> minhasMensagens = new ArrayList<Messages>();
     private ArrayList<String> mensagensFeed = new ArrayList<String>();
@@ -51,11 +50,9 @@ public class Account {
                 i = 1;
             }
         }
-        
-
+    
         System.out.print("Password: ");
         password = sc.nextLine();
-
 
         i = 0;
         k = 0;
@@ -115,8 +112,18 @@ public class Account {
 		
 		System.out.println("\nSelecione o que você seja mudar:\n1 - Sexo\n2 - Idade\n3 - Cidade\n4 - País\n5 - Todos\n");
 		
-		int entrada = sc.nextInt();
-		sc.nextLine();
+		int entrada = -11;
+
+        while(entrada != 1 || entrada != 2 || entrada != 3 || entrada != 4 || entrada != 5){
+            try{
+                entrada = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("\nEntrada digitada inválida! Por favor digite um número válido");
+                sc.nextLine();
+            }
+        }
+
 		switch(entrada) {
 		
 			case 1:
@@ -147,8 +154,7 @@ public class Account {
 				sexo = sc.nextLine();
 				
 				System.out.print("Idade: ");
-				idade = sc.nextInt();
-                sc.nextLine();
+				perfilIdade();
 
                 System.out.print("Cidade: ");
                 cidade = sc.nextLine();
@@ -209,9 +215,19 @@ public class Account {
                 System.out.println(amigosAdd.get(i) + " deseja te adicionar!");
                 System.out.print("Você aceita? "); 
 
-                int aceita = sc.nextInt();
-                sc.nextLine();
+                int aceita = -11;
 
+                while(aceita != 0 || aceita != 1){
+                    try {
+                        aceita = sc.nextInt();
+                        sc.nextLine();
+                    } catch (InputMismatchException e) {
+                        System.out.println("\nEntrada digitada inválida!");
+                        System.out.println("Digite 1 para aceitar e 0 para recusar");
+                        sc.nextLine();
+                    }
+                }
+                
                 if (aceita == 0){
                     amigosAdd.remove(i);
                     System.out.println("\nPedido recusado!\n"); //REMOVE DA LISTA DE PEDIDOS
@@ -232,8 +248,6 @@ public class Account {
         }
         else System.out.println("\nVocê não possui pedidos de amizade!\n");
     }
-
-
 
     public void printarAmigos(){
         if(amigos.size() > 0){
@@ -380,6 +394,33 @@ public class Account {
         }
     }
 
+    public void removerComunidade(ArrayList<Account> contas){
+
+        if(comunidadeDono != null){
+            System.out.println("\nDigite o usuario que deseja remover da sua comunidade: ");
+            String pessoa = sc.nextLine();
+            int removido = 0;
+            for(int i = 0; i < contas.size(); i++){
+                if(pessoa.equals(contas.get(i).username)){
+                    for(int j = 0; j < comunidadeDono.membros.size(); j++){
+                        if(pessoa.equals(comunidadeDono.membros.get(j))){
+                            comunidadeDono.membros.remove(j); //REMOVE A PESSOA COMO MEMBRO E REMOVE DAS COMUNIDADES DELA
+                            contas.get(i).minhasComunidades.remove(comunidadeDono.nomeComunidade);
+                            removido ++;
+                            System.out.println("\nPronto! " + pessoa + " foi removido da sua comunidade!\n");
+                        }
+                    }
+                }
+            }
+            if(removido == 0){
+                System.out.println("\nO usuario digitado não existe ou não faz parte da sua comunidade!\n");
+            }
+        }
+        else{
+            System.out.println("\nVocê ainda não é dono de uma comunidade!");
+        }
+    }
+
     public void mandarFeed(){
         System.out.println("\nDigite alguma coisa para seu feed:");
         String mensagem = sc.nextLine();
@@ -436,7 +477,18 @@ public class Account {
     public void controlarFeed(){
         System.out.println("\nQuem você deseja que possa ver o seu Feed? Escolha um número abaixo:");
         System.out.println("0 - Todos usuarios do iFace\n1 - Somente amigos");
-        int auxiliar = sc.nextInt();
+        int auxiliar = -11;
+
+        while(auxiliar != 0 || auxiliar != 1){
+            try {
+                auxiliar = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("\nEntrada digitada inválida!");
+                System.out.println("0 - Todos usuarios do iFace\n1 - Somente amigos");
+                sc.nextLine();
+            }
+        }
 
         if(auxiliar == 0){
             feedControl = 0;
@@ -451,9 +503,20 @@ public class Account {
     public void excluirConta(ArrayList<Account> contas, int id){
         System.out.println("\nTem certeza que deseja excluir sua conta?\nDigite 1 para confirmar e 0 para cancelar.");
 
-        int excluir = sc.nextInt();
-        sc.nextLine();
+        int excluir = -11;
+
+        while(excluir != 0 || excluir != 1){
+            try {
+                excluir = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("\nEntrada digitada inválida! Por favor digite um número valido");
+                System.out.println("Tem certeza que deseja excluir sua conta?\nDigite 1 para confirmar e 0 para cancelar.");
+                sc.nextLine();
+            }
+        }
         
+
         if(excluir == 1){
             for(int i = 0; i < contas.size(); i++) {
                 for(int j = 0; j < contas.get(i).amigos.size(); j++) {
