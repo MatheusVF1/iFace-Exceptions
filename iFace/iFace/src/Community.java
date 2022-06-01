@@ -1,9 +1,14 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Community{
 	private String dono, nomeComunidade, descricao;
 	private ArrayList<String> membros = new ArrayList<String>();
+
+    public Community(String dono, String nomeComunidade, String descricao) {
+		this.dono = dono;
+		this.nomeComunidade = nomeComunidade;
+		this.descricao = descricao;
+	}
 
     public String getDono(){
         return dono;
@@ -29,23 +34,6 @@ public class Community{
         this.descricao = descricao;
     }
 	
-	public void criarNovaComunidade(String donoComunidade) {	
-		Scanner sc = new Scanner(System.in);
-		
-		dono = donoComunidade;
-		membros.add(donoComunidade);
-
-		System.out.println("\nBem vindo a criação da comunidade! Escreva as informações abaixo.");
-
-		System.out.print("Nome da comunidade: ");
-		nomeComunidade = sc.nextLine();
-		
-		System.out.print("Descrição da comunidade: ");
-		descricao = sc.nextLine();
-		
-		System.out.println("\nParabéns! Sua comunidade foi criada!");
-		
-	}
 
     public int encontrarMembro(String pessoa) {
 		for(String val : membros) {
@@ -74,4 +62,10 @@ public class Community{
 		}
 		
 	}
+
+    public void printarMembros(){
+        for(int i = 0; i < membros.size(); i++){
+            System.out.println("   " + membros.get(i));
+        }
+    }
 }
