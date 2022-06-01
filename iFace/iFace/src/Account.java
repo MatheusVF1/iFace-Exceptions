@@ -399,12 +399,36 @@ public class Account {
         else System.out.println("\nVocê ainda não possui nenhuma mensagem!");
     }
 
-    public void criarComunidade() {
+    public void criarComunidade(ArrayList<Account> contas) {
         if(comunidadeDono == null){
-        Community comunidade = new Community();
-		comunidade.criarNovaComunidade(username);
+            int existe = 0;
 
-		comunidadeDono = comunidade;
+		    System.out.println("\nBem vindo a criação da comunidade! Escreva as informações abaixo.");
+
+		    System.out.print("Nome da comunidade: ");
+		    String nomeComunidade = sc.nextLine();
+		
+            for(int i = 0; i < contas.size(); i++){
+                if(contas.get(i).comunidadeDono != null){
+                    if(nomeComunidade.equals(contas.get(i).comunidadeDono.getNomeComunidade())){
+                        System.out.println("\nJá existe uma comunidade com esse nome!");
+                        existe++;
+                    }
+                }
+            }
+
+            if(existe == 0){
+                System.out.print("Descrição da comunidade: ");
+		        String descricao = sc.nextLine();
+
+                Community comunidade = new Community(username, nomeComunidade, descricao);
+                comunidade.addMembro(username);
+
+                comunidadeDono = comunidade;
+
+		        System.out.println("\nParabéns! Sua comunidade foi criada!");
+            }
+		
         }
         else{
             System.out.println("\nVocê já é dono de uma comunidade!\n");
@@ -446,6 +470,10 @@ public class Account {
 
         if(comunidadeDono != null){
             System.out.println("\nDigite o usuario que deseja remover da sua comunidade: ");
+            System.out.println("\nMembros atuais: ");
+            comunidadeDono.printarMembros();
+            System.out.println("\n");
+
             String pessoa = sc.nextLine();
             int removido = 0;
             for(int i = 0; i < contas.size(); i++){
