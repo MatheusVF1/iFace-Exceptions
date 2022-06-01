@@ -2,8 +2,20 @@ import java.util.ArrayList;
 
 public class Messages{
 	
-	public String remetente;
-	public ArrayList<String> mensagens = new ArrayList<String>();
+	private String remetente;
+	private ArrayList<String> mensagens = new ArrayList<String>();
+
+    public String getRemetente(){
+        return remetente;
+    }
+
+    public void setRementente(String remetente){
+        this.remetente = remetente;
+    }
+
+    public void addMessage(String username, String mensagemPEnviar){
+        mensagens.add(username + ": " + mensagemPEnviar);
+    }
 
 	public void printarMensagens(){
 		if(mensagens.size() > 0) {
@@ -16,5 +28,6 @@ public class Messages{
 		else {
 			System.out.println("Você ainda não recebeu nenhuma mensagem do(a) " + remetente);
 		}
-	}	
+	}
+	
 }
