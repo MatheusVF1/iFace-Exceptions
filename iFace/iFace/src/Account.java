@@ -8,7 +8,7 @@ public class Account {
     private String sexo, cidade, pais;
     private int idade, feedControl = 0;
     private Community comunidadeDono = null;
-    private Friends friends = null;
+    private Friends friends = new Friends();
     private ArrayList<String> minhasComunidades = new ArrayList<String>();
     private ArrayList<Messages> minhasMensagens = new ArrayList<Messages>();
     private ArrayList<String> mensagensFeed = new ArrayList<String>();
@@ -152,7 +152,6 @@ public class Account {
 				System.out.print("Sexo: ");
 				sexo = sc.nextLine();
 				
-				System.out.print("Idade: ");
 				perfilIdade();
 
                 System.out.print("Cidade: ");
@@ -171,12 +170,14 @@ public class Account {
         System.out.println("Cidade: " + cidade + "   País: " + pais);
 
 		System.out.println("Lista de amigos: ");
-		for(int i = 0; i < friends.getAmigos().size(); i++) {
-			System.out.println("   " + friends.getAmigos().get(i));
-		}
+        if(friends != null){
+            for(int i = 0; i < friends.getAmigos().size(); i++) {
+                System.out.println("   " + friends.getAmigos().get(i));
+            }
+        }
 
 		if(comunidadeDono != null) {
-			System.out.println("Minha comunidade: " + comunidadeDono.getNomeComunidade() + "\n  Descrição: " + comunidadeDono.getDescricao());
+			System.out.println("\nMinha comunidade: " + comunidadeDono.getNomeComunidade() + "\n  Descrição: " + comunidadeDono.getDescricao());
 
         }
 
@@ -205,8 +206,8 @@ public class Account {
                 else if(friends.findFriendRequest(nomeAmigo) == 1){   //verifica se você já recebeu uma solicitação de amizade dessa pessoa
                     System.out.println("\nEsse usuario já te enviou uma solicitação de amizade!");
                 }
-                else if(contas.get(i).friends.findFriendRequest(this.username) == 1){
-                    System.out.println("\nVocê já enviou um pedido de amizade para " + nomeAmigo + "!");
+                else if(contas.get(i).friends.findFriendRequest(this.username) == 1 ){
+                    System.out.println("\nVocê já enviou um pedido de amizade para " + nomeAmigo + "!"); //VERIFICA SE VC JA ENVIOU UMA SOLICITAÇÃO PARA A PESSOA
                 }
                 else{
                     contas.get(i).friends.addSolicitacaoAmigo(this.username);  //ADICIONANDO SEU NOME A LISTA DE PEDIDOS DO AMIGO SOLICITADO
@@ -312,61 +313,90 @@ public class Account {
     }
 
     public void mandarMensagem(ArrayList<Account> contas){
-        int decidir = 0;
+        int decidir = 0, existe = 0;
         System.out.println("\nPara quem você deseja mandar a mensagem?");
         String pessoa = sc.nextLine();
 
-        for(int i = 0; i < minhasMensagens.size(); i++){
-            if(pessoa.equals(minhasMensagens.get(i).remetente)){
-                System.out.print("\nDigite sua mensagem: ");  //ENVIAR PARA ALGUEM Q JA ENVIOU ANTES
-                String mensagemPEnviar = sc.nextLine();
-                minhasMensagens.get(i).mensagens.add(username + ": " + mensagemPEnviar);
-                decidir++;
-            }
-        }
-        if(decidir == 0){
+        for(int k = 0; k < contas.size(); k++){
+            if(pessoa.equals(contas.get(k).username)) { //VERIFICANDO SE O NOME DIGITADO EXISTE
 
-            for(int i = 0; i < contas.size(); i++) {
-                if(pessoa.equals(contas.get(i).username)) {
-                    Messages mensagemAdd = new Messages();
-                    mensagemAdd.remetente = username;
-
-                    System.out.print("\nDigite sua mensagem: ");  //ENVIAR PARA ALGUEM Q NUNCA ENVIOU
-                    String mensagemPEnviar = sc.nextLine();
-
-                    mensagemAdd.mensagens.add(username + ": " + mensagemPEnviar);
-                    contas.get(i).minhasMensagens.add(mensagemAdd);
-                    
+                if(pessoa.equals(this.username)){ //VERIFICANDO SE O USERNAME É IGUAL O MEU
+                    System.out.println("\nVocê não pode enviar uma mensagem para você mesmo!");
                 }
+                else{
+
+                    for(int i = 0; i < minhasMensagens.size(); i++){
+                        if(pessoa.equals(minhasMensagens.get(i).getRemetente())){ //VERIFICANDO SE JA TENHO MENSAGEM COM ESSA PESSOA
+                            System.out.print("\nDigite sua mensagem: ");  //ENVIAR PARA ALGUEM Q JA ENVIOU ANTES
+                            String mensagemPEnviar = sc.nextLine();
+                            minhasMensagens.get(i).addMessage(username, mensagemPEnviar); //ENVIANDO A MENSAGEM PARA MEU CHAT COM A PESSOA
+
+                            System.out.print("\nFEITO -- 1!" + minhasMensagens.get(i).getRemetente());
+
+                            for(int j = 0; j < contas.get(k).minhasMensagens.size(); j++){
+                                if(contas.get(k).minhasMensagens.get(j).getRemetente().equals(this.username)){
+                                    contas.get(k).minhasMensagens.get(j).addMessage(this.username, mensagemPEnviar);
+                                    System.out.print("\nFEITO -- 2"); 
+                                } //ENVIANDO A MENSAGEM PARA O CHAT DA PESSOA
+                            }
+                            decidir++;
+                        }
+                    }
+
+                    if(decidir == 0){
+                        Messages mensagemAdd = new Messages();
+                        mensagemAdd.setRementente(this.username);
+            
+                        System.out.print("\nDigite sua mensagem: ");  //ENVIAR PARA ALGUEM Q NUNCA ENVIOU
+                        String mensagemPEnviar = sc.nextLine();
+
+                        mensagemAdd.addMessage(this.username, mensagemPEnviar);
+                        contas.get(k).minhasMensagens.add(mensagemAdd); //ENVIANDO A MENSAGEM PARA O CHAT DA PESSOA
+
+                        Messages mensagemAdd1 = new Messages();
+                        mensagemAdd1.setRementente(pessoa);  //ENVIANDO A MENSAGEM PARA O MEU CHAT COM A PESSOA
+                        mensagemAdd1.addMessage(this.username, mensagemPEnviar);
+                        minhasMensagens.add(mensagemAdd1);  //ENVIANDO A MENSAGEM PARA O MEU CHAT COM A PESSOA
+
+                    }
+                    System.out.println("\nMensagem Enviada!");
+                }
+                existe ++;
             }
         }
-		System.out.println("\nMensagem Enviada!");
+
+        if(existe == 0){
+            System.out.println("\nO Usuario digitado não existe!");
+        }
     }
 
     public void lerMensagens(){
 
-        System.out.println("\nDigite o nome da pessoa que deseja ler as mensagens");
         if(minhasMensagens.size() > 0){
+            System.out.println("\nDigite o nome da pessoa que deseja ler as mensagens");
             System.out.println("Suas conversas:");
+
             for(int i = 0; i < minhasMensagens.size(); i++){
-                System.out.print(minhasMensagens.get(i).remetente + " / ");
+                System.out.print(minhasMensagens.get(i).getRemetente() + " / ");
             }
-            System.out.println("\n\n");
-        }
-        String pessoa = sc.nextLine();  //ESCOLHE O NOME DA PESSOA QUE DESEJA LER
-        int leu = 0;
 
-        for(int i = 0; i < minhasMensagens.size(); i++){
-            if(pessoa.equals(minhasMensagens.get(i).remetente)){
-                minhasMensagens.get(i).printarMensagens();  //IMPRIME TODAS MENSAGENS DA PESSOA DIGITADA
-                leu++;
+            System.out.println("\n");
+
+            String pessoa = sc.nextLine();  //ESCOLHE O NOME DA PESSOA QUE DESEJA LER
+            int leu = 0;
+
+            for(int i = 0; i < minhasMensagens.size(); i++){
+                if(pessoa.equals(minhasMensagens.get(i).getRemetente())){
+                    minhasMensagens.get(i).printarMensagens();  //IMPRIME TODAS MENSAGENS DA PESSOA DIGITADA
+                    leu++;
+                }
+            }
+
+            if(leu == 0){  //NÃO HAVIA MENSAGENS DA PESSOA
+                System.out.println("\nO nome digitado não existe ou vocês ainda não possuem mensagens!");
             }
         }
-
-        if(leu == 0){  //NÃO HAVIA MENSAGENS DA PESSOA
-            System.out.println("\nO nome digitado está errado ou vocês ainda não possuem mensagens!");
-        }
-
+        else System.out.println("\nVocê ainda não possui nenhuma mensagem!");
     }
 
     public void criarComunidade() {
@@ -559,7 +589,7 @@ public class Account {
 
             for(int i = 0; i < contas.size(); i++) {
                 for(int j = 0; j < contas.get(i).minhasMensagens.size(); j++) {
-                    if(username.equals(contas.get(i).minhasMensagens.get(j).remetente)) { //remove da lista de mensagens
+                    if(username.equals(contas.get(i).minhasMensagens.get(j).getRemetente())) { //remove da lista de mensagens
                         contas.get(i).minhasMensagens.remove(j);
                     }
                 }
